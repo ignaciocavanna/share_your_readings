@@ -17,28 +17,56 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 db.connect()
 
+let books = db.query("SELECT * FROM books")
 
+let error = null;
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
+
+    books = await db.query("SELECT * FROM books")
     res.render("index.ejs",{
-        title: "titolo",
-        description: "Lorem Ipsum è un testo segnaposto utilizzato nel settore della tipografia e della stampa. Lorem Ipsum è considerato il testo segnaposto standard sin dal sedicesimo secolo, quando un anonimo tipografo prese una cassetta di caratteri e li assemblò per preparare un testo campione.",
-        userComment: "È universalmente riconosciuto che un lettore che osserva il layout di una pagina viene distratto dal contenuto testuale se questo è leggibile. Lo scopo dell’utilizzo del Lorem Ipsum è che offre una normale distribuzione delle lettere (al contrario di quanto avviene se si utilizzano brevi frasi ripetute, ad esempio “testo qui”), apparendo come un normale blocco di testo leggibile. Molti software di impaginazione e di web design utilizzano Lorem Ipsum come testo modello. Molte versioni del testo sono state prodotte negli anni, a volte casualmente, a volte di proposito (ad esempio inserendo passaggi ironici)."
+        data: books.rows,
+        error: error
     })
+
+    error = null; 
 })
 
 app.get("/add-book", async (req, res) => {
-    res.render("add-a-book.ejs")
-})
+    res.render("add-a-book.ejs", {
+        error: error
+    })
+
+    error = null;
+});
 
 app.post("/add-a-book", async (req, res) => {
-    console.log(req.body)
-    console.log("libro aggiunto")
-    res.redirect("/")
+    try {
+        console.log(req.body.ISBN)
+        const userISBN = req.body.ISBN;
+        const result = await axios.get(
+            `https://openlibrary.org/api/books?bibkeys=ISBN:${userISBN}&jscmd=details&format=json`);
+
+        console.log(result.data)
+
+        if ( result.data[`ISBN:${userISBN}`] == undefined ) {
+            error = "We dont have this book in our record. Sorry ;("
+            res.redirect("/add-book")
+        } else {
+            const smallCover = result.data[`ISBN:${userISBN}`]["thumbnail_url"];
+            const LargeCover = smallCover ? smallCover.replace("-S", "-L") : "assets/images/no_cover.png";
+            const bookTitle = result.data[`ISBN:${userISBN}`]["details"]['title'];
+
+            await db.query("INSERT INTO books (name, cover) VALUES ($1, $2)",
+                [bookTitle ,LargeCover]);
+
+            error = '';
+            res.redirect("/")
+        }
+    } catch (error) {
+        console.error(error)
+    }
 })
-
-
-
 
 app.listen(port, () => {
     console.log(`Application listen on port: ${port}`)

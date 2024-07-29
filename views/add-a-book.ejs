@@ -19,9 +19,9 @@
                 <div class="form-text mb-1">Chose a username that will be visible under the book</div>
             </div>
             <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">Book Title</label>
-              <input type="text" name="book" style="width: 50%; background-color: #9CA986;" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-              <div class="form-text mb-3">The original book description will set automatically</div>
+              <label for="exampleInputEmail1" class="form-label">ISBN</label>
+              <input type="text" name="ISBN" style="width: 50%; background-color: #9CA986;" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+              <div class="form-text mb-3">ISBN is a unique serial code like: 978-1585424337</div>
             </div>
             <div class="mb-3">
               <label for="floatingTextarea2" class="form-label">Share Your experience with the book</label>
@@ -36,6 +36,8 @@
             </div>
             <button type="submit" class="btn btn-primary">Add Book</button>
           </form>
+
+          <p> <%= error ? error : "" %></p>
 
     </div>
 </body>
