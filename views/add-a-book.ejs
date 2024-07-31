@@ -15,18 +15,18 @@
         <form action="/add-a-book" method="post">
             <div class="mb-1">
                 <label for="exampleInputEmail1" class="form-label">Username</label>
-                <input type="text" name="username" style="width: 50%; background-color: #9CA986;" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <input type="text" required name="username" style="width: 50%; background-color: #9CA986;" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                 <div class="form-text mb-1">Chose a username that will be visible under the book</div>
             </div>
             <div class="mb-3">
               <label for="exampleInputEmail1" class="form-label">ISBN</label>
-              <input type="text" name="ISBN" style="width: 50%; background-color: #9CA986;" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+              <input type="text" name="ISBN" required style="width: 50%; background-color: #9CA986;" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
               <div class="form-text mb-3">ISBN is a unique serial code like: 978-1585424337</div>
             </div>
             <div class="mb-3">
               <label for="floatingTextarea2" class="form-label">Share Your experience with the book</label>
               <div class="form-floating">
-                <textarea class="form-control" name="userComment" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 200px; background-color: #9CA986;"></textarea>
+                <textarea class="form-control" required name="userComment" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 200px; background-color: #9CA986;"></textarea>
                 <label for="floatingTextarea2">Thougts...</label>
               </div>
             </div>
@@ -34,7 +34,23 @@
               <input type="checkbox" class="form-check-input" id="exampleCheck1">
               <label class="form-check-label" for="exampleCheck1">Private</label>
             </div>
-            <button type="submit" class="btn btn-primary">Add Book</button>
+            <div class="rating">
+              <input type="radio" id="star5" name="rating" value="*****">
+              <label for="star5"></label>
+              <input type="radio" id="star4" name="rating" value="****">
+              <label for="star4"></label>
+              <input type="radio" id="star3" name="rating" value="***">
+              <label for="star3"></label>
+              <input type="radio" id="star2" name="rating" value="**">
+              <label for="star2"></label>
+              <input type="radio" id="star1" name="rating" value="*">
+              <label for="star1"></label>
+            </div>            
+            <br>
+            <div>
+              <button type="submit" class="btn btn-primary">Add Book</button>
+            </div>
+
           </form>
 
           <p> <%= error ? error : "" %></p>
